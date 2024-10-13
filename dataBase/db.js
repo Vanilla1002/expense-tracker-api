@@ -17,8 +17,6 @@ const expensesDB = new sqlite3.Database(dbExpensesPath, (err) => {
       amount REAL,
       category TEXT,
       date TEXT
-      user_id INTEGER,
-      FOREIGN KEY (user_id) REFERENCES users(id)
     )
   `, (err) => {
     if (err) {
@@ -43,8 +41,6 @@ const incomeDB = new sqlite3.Database(dbIncomePath, (err) => {
       amount REAL,
       category TEXT,
       date TEXT
-      user_id INTEGER,
-      FOREIGN KEY (user_id) REFERENCES users(id)
     )
   `, (err) => {
     if (err) {
