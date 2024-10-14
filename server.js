@@ -1,9 +1,4 @@
 
-// app.listen(
-    // port,
-    // () => console.log(`Listening on port ${port}`)    
-// )
-
 
 require('dotenv').config();  
 const app = require("express")();
@@ -16,15 +11,7 @@ const PORT = process.env.PORT || 3000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// app.get("/", (req, res, next) => {
-    // res.write("Hello");
-    // next(); //remove 
-// });
-// 
-// app.get("/", (req, res, next) => {
-    // res.write(" World !!!");
-    // res.end();
-// });
+
 
 app.listen(8080);
 
