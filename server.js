@@ -17,7 +17,7 @@ app.listen(8080);
 
 app.use('/api/expenses', expensesRoutes);
 app.use('/api/auth', require('./routes/auth'));
-
+app.use('/api/incomes', require('./routes/incomes'));
 
 
 // Start server

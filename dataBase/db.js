@@ -38,7 +38,7 @@ const incomeDB = new sqlite3.Database(dbIncomePath, (err) => {
     console.log('Connected to the SQLite database.');
   }
   incomeDB.run(`
-    CREATE TABLE IF NOT EXISTS income (
+    CREATE TABLE IF NOT EXISTS incomes (
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         description TEXT,
         amount REAL,

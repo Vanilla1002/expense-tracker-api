@@ -3,7 +3,6 @@ const router = express.Router();
 const authenticateToken = require('../middleware/auth');
 
 const {expensesDB} = require('./../dataBase/db');
-const {incomeDB} = require('./../dataBase/db');
 
 router.post('/add', authenticateToken, (req, res) => {
     const { description, amount, category} = req.body;
@@ -32,41 +31,39 @@ router.get('/',authenticateToken,(req, res) => {
 });
 
 router.delete('/delete/:id', authenticateToken, (req, res) => {
+  const userId = req.user.id;
   const { id } = req.params;
-  expensesDB.run(`DELETE FROM expenses WHERE id = ?`, [id], (err) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
+  expensesDB.run(`DELETE FROM expenses WHERE user_id = ? AND id = ?`, [userId, id],
+    function (err) {  
+      if (err) {
+        return res.status(500).json({ error: err.message });
+      }
+      if (this.changes === 0) {
+        return res.status(404).json({ error: 'Expense not found' });
+      }
+      res.json({ message: 'Expense Deleted successfully' });
     }
-    res.json({ message: 'Expense deleted successfully' });
-  });
+  );
 });
 
 router.put('/update/:id', authenticateToken,(req, res) => {
-    const { id } = req.params;
-    const { description, amount, category } = req.body;
-    expensesDB.run(
-      `UPDATE expenses SET description = ?, amount = ?, category = ? WHERE id = ?`,
-      [description, amount, category, id],
-      function (err) {
-        if (err) {
-          return res.status(500).json({ error: err.message });
-        }
-        res.json({ message: 'Expense updated successfully' });
+
+  const userId = req.user.id;
+  const { id } = req.params;
+  const { description, amount, category } = req.body;
+  expensesDB.run(
+    `UPDATE expenses SET description = ?, amount = ?, category = ? WHERE user_id = ? AND  id = ?`,
+    [description, amount, category, userId, id],
+    function (err) {  
+      if (err) {
+        return res.status(500).json({ error: err.message });
       }
-    )});
+      if (this.changes === 0) {
+        return res.status(404).json({ error: 'Expense not found' });
+      }
+      res.json({ message: 'Expense updated successfully' });
+    }
+  )});
 
 
-router.get('/check', (req, res) => {
-  expensesDB.all(`SELECT name FROM sqlite_master WHERE type='table' AND name='expenses'`, [], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    if (rows.length > 0) {
-      res.json({ message: 'Expenses table exists.' });
-    } else {
-      res.json({ message: 'Expenses table does not exist.' });
-    }
-  });
-});
-  
 module.exports = router;
