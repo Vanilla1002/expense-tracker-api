@@ -49,12 +49,18 @@ router.post('/login', async (req, res) => {
         }
 
         const token = jwt.sign({ id: row.id }, process.env.JWT_SECRET, { expiresIn: '1h' });
+        res.cookie('token', token, { httpOnly: true, maxAge: 3600000 });
         res.json({ token });
         
+
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
 });
 
+router.post('/logout', (req, res) => {
+    res.clearCookie('token');
+    res.json({ message: 'Logout successful' });
+  });
 
 module.exports = router

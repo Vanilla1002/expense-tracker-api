@@ -2,7 +2,7 @@ const sqlite3 = require('sqlite3').verbose();
 const path = require('path');
 
 const dbExpensesPath = path.resolve(__dirname, 'expenses.db');
-const dbIncomePath = path.resolve(__dirname, 'income.db');
+const dbIncomePath = path.resolve(__dirname, 'incomes.db');
 const usersPath = path.resolve(__dirname, 'users.db');
 
 const expensesDB = new sqlite3.Database(dbExpensesPath, (err) => {
