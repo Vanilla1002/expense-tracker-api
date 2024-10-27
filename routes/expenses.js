@@ -6,6 +6,9 @@ const {expensesDB} = require('./../dataBase/db');
 
 router.post('/add', authenticateToken, (req, res) => {
     const { description, amount, category} = req.body;
+    if (!description || !amount || !category) {
+      return res.status(400).json({ error: 'Missing required fields' });
+    }
     const userId = req.user.id;
     const date = new Date().toISOString().slice(0, 10);
     expensesDB.run(
@@ -33,6 +36,9 @@ router.get('/',authenticateToken,(req, res) => {
 router.delete('/delete/:id', authenticateToken, (req, res) => {
   const userId = req.user.id;
   const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ error: 'Missing ID' });
+  }
   expensesDB.run(`DELETE FROM expenses WHERE user_id = ? AND id = ?`, [userId, id],
     function (err) {  
       if (err) {
@@ -50,7 +56,13 @@ router.put('/update/:id', authenticateToken,(req, res) => {
 
   const userId = req.user.id;
   const { id } = req.params;
+  if (!id) {
+    return res.status(400).json({ error: 'Missing ID' });
+  }
   const { description, amount, category } = req.body;
+  if (!description || !amount || !category) {
+    return res.status(400).json({ error: 'Missing required fields' });
+  }
   expensesDB.run(
     `UPDATE expenses SET description = ?, amount = ?, category = ? WHERE user_id = ? AND  id = ?`,
     [description, amount, category, userId, id],
