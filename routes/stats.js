@@ -5,6 +5,37 @@ const authenticateToken = require('../middleware/auth');
 const {incomeDB} = require('./../dataBase/db');
 const {expensesDB} = require('./../dataBase/db');
 
+
+/**
+ * @swagger
+ * /api/stats/sum:
+ *   get:
+ *     summary: Get the total balance
+ *     tags: [Stats]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: The total balance
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 totalExpenses:
+ *                   type: number
+ *                 totalIncomes:
+ *                   type: number
+ *                 totalBalance:
+ *                   type: number
+ *               example:
+ *                 totalExpenses: 100
+ *                 totalIncomes: 200
+ *                 totalBalance: 100
+ *         500:
+ *           description: Internal server error
+ */
+
 router.get('/sum',authenticateToken,(req, res) => {
     const userId = req.user.id;
 

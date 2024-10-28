@@ -6,6 +6,33 @@ const jwt = require('jsonwebtoken');
 const router = express.Router();
 
 
+/**
+ * @swagger
+ * /api/auth/register:
+ *   post:
+ *     summary: Register a new user
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:  
+ *                 type: string
+ *                 example: "vanilla"
+ *               password:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: User registered successfully
+ *       409:
+ *         description: Username already exists
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/register', async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -25,7 +52,33 @@ router.post('/register', async (req, res) => {
     );
   });
 
-
+/**
+ * @swagger
+ * /api/auth/login:
+ *   post:
+ *     summary: Login a user     
+ *     tags: [Auth]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               username:  
+ *                 type: string
+ *                 example: "vanilla"
+ *               password:
+ *                 type: string
+ *                 example: "123456"
+ *     responses:
+ *       200:
+ *         description: User logged in successfully
+ *       401:
+ *         description: Invalid username or password
+ *       500:
+ *         description: Internal server error
+ */
 router.post('/login', async (req, res) => {
     const { username, password } = req.body;
     
@@ -57,6 +110,17 @@ router.post('/login', async (req, res) => {
         res.status(500).json({ error: err.message });
     }
 });
+
+/**
+ * @swagger
+ * /api/auth/logout:
+ *   post:
+ *     summary: Logout a user
+ *     tags: [Auth]
+ *     responses:
+ *       200:
+ *         description: Logout successful
+ */
 
 router.post('/logout', (req, res) => {
     res.clearCookie('token');
