@@ -20,7 +20,7 @@ The Expense Tracker API allows users to add, update, delete, and categorize thei
 ## Setup and Installation
 1. Clone the repository:
 ```
-git clone https://github.com/yourusername/expense-tracker-api.git
+git clone https://github.com/Vanilla1002/expense-tracker-api.git
 cd expense-tracker-api
 ```
 2. Install dependencies:
