@@ -57,39 +57,11 @@ router.post('/add', authenticateToken, (req, res) => {
     );
   });
 
-/**
- * @swagger
- * /api/expenses/:
- *   get:
- *     summary: Get all expenses
- *     tags: [Expenses]
- *     responses:
- *       200:
- *         description: expenses retrieved
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 expenses:
- *                   type: array
- *                   items:
- *                     type: object
- */
- 
-router.get('/',authenticateToken,(req, res) => {
-  const userId = req.user.id;
-  expensesDB.all(`SELECT * FROM expenses WHERE user_id = ?`, [userId], (err, rows) => {
-    if (err) {
-      return res.status(500).json({ error: err.message });
-    }
-    res.json({ expenses: rows });
-  });
-});
+
 
 /**
  * @swagger
- * /api/expenses/:id:
+ * /api/expenses/{id}:
  *   get:
  *     summary: Get an expense
  *     tags: [Expenses]
@@ -154,7 +126,7 @@ router.get('/:id',authenticateToken,(req, res) => {
 
 /**
  * @swagger
- * /api/expenses/delete/:id:
+ * /api/expenses/delete/{id}:
  *   delete:
  *     summary: Delete an expense
  *     tags: [Expenses]
@@ -196,7 +168,7 @@ router.delete('/delete/:id', authenticateToken, (req, res) => {
 
 /**
  * @swagger
- * /api/expenses/update/:id:
+ * /api/expenses/update/{id}:
  *   put:
  *     summary: Update an expense
  *     tags: [Expenses]

@@ -3,7 +3,7 @@ const router = express.Router();
 const authenticateToken = require('../middleware/auth');
 
 const {incomeDB} = require('./../dataBase/db');
-const { route } = require('./expenses');
+
 
 /**
  * @swagger
@@ -58,40 +58,11 @@ router.post('/add' ,authenticateToken,(req,res) =>{
     )
 });
 
-/**
- * @swagger
- * /api/incomes/:
- *   get:
- *     summary: Get all incomes
- *     tags: [Incomes]
- *     responses:
- *       200:
- *         description: incomes retrieved
- *         content:
- *           application/json:
- *             schema:
- *               type: object
- *               properties:
- *                 incomes:
- *                   type: object
- *                   items:
- *                     type: object
- * 
- */
 
-router.get('/',authenticateToken,(req, res) => {
-  const userId = req.user.id;
-  expensesDB.all(`SELECT * FROM incomes WHERE user_id = ?`, [userId], (err, rows) => {
-    if (err) {
-        return res.status(500).json({ error: err.message });
-    }
-    res.json({ expenses: rows });
-  });
-});
 
 /**
  * @swagger
- * /api/incomes/:id:
+ * /api/incomes/{id}:
  *   get:
  *     summary: Get an income
  *     tags: [Incomes]
@@ -137,7 +108,7 @@ router.get('/:id',authenticateToken,(req, res) => {
   if (!id) {
     return res.status(400).json({ error: 'Missing ID' });
   }
-  expensesDB.get(`SELECT * FROM incomes WHERE user_id = ? AND id = ?`, [userId, id], (err, row) => {
+  incomeDB.get(`SELECT * FROM incomes WHERE user_id = ? AND id = ?`, [userId, id], (err, row) => {
     if (err) {
       return res.status(500).json({ error: err.message });
     }
@@ -150,7 +121,7 @@ router.get('/:id',authenticateToken,(req, res) => {
 
 /**
  * @swagger
- * /api/incomes/delete/:id:
+ * /api/incomes/delete/{id}:
  *   delete:
  *     summary: Delete an income
  *     tags: [Incomes]
@@ -176,7 +147,7 @@ router.delete('/delete/:id', authenticateToken, (req, res) => {
   if (!id) {
     return res.status(400).json({ error: 'Missing ID' });
   }
-  expensesDB.run(`DELETE FROM incomes WHERE user_id = ? AND id = ?`, [userId, id],
+  incomeDB.run(`DELETE FROM incomes WHERE user_id = ? AND id = ?`, [userId, id],
     function (err) {  
       if (err) {
         return res.status(500).json({ error: err.message });
@@ -191,7 +162,7 @@ router.delete('/delete/:id', authenticateToken, (req, res) => {
 
 /**
  * @swagger
- * /api/incomes/update/:id:
+ * /api/incomes/update/{id}:
  *   put:
  *     summary: Update an income
  *     tags: [Incomes]
@@ -237,7 +208,7 @@ router.put('/update/:id', authenticateToken,(req, res) => {
   if (!description || !amount || !category) {
     return res.status(400).json({ error: 'Missing required fields' });
   }
-  expensesDB.run(
+  incomeDB.run(
     `UPDATE incomes SET description = ?, amount = ?, category = ? WHERE user_id = ? AND  id = ?`,
     [description, amount, category, userId, id],
     function (err) {  
