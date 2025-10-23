@@ -24,6 +24,7 @@ app.use('/api/auth', require('./routes/auth'));
 app.use('/api/incomes', require('./routes/incomes'));
 app.use('/api/stats', require('./routes/stats'));
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocs));
+app.use('/api/ai', require('./routes/ai'));
 
 
 // Start server

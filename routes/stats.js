@@ -4,9 +4,9 @@ const authenticateToken = require('../middleware/auth');
 
 const {incomeDB} = require('./../dataBase/db');
 const {expensesDB} = require('./../dataBase/db');
-const { calculateBasicStats } = require('./../mathFunctions');
+const { calculateBasicStats } = require('../services/mathFunctions');
 
-const { calculateAdvancedStats } = require('./../mathFunctions');
+const { calculateAdvancedStats } = require('../services/mathFunctions');
 
 
 
