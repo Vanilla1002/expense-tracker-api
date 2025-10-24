@@ -163,7 +163,6 @@ function parseDateRange(filters) {
 const actionHandlers = {
   addExpense: async (data, userId) => {
     const { amount, category, date, description } = data;
-    console.log("Adding expense:", description, amount, category, date, userId);
     await addExpense(description, amount, category, date, userId);
     return `Expense of ${amount} added under category ${category}.`;
   },
@@ -217,15 +216,12 @@ async function interpretAICommand(message, userId) {
         history: [{ role: "user", parts: [{ text: systemPrompt }] }],
     });
 
-    // Ensure we pass a string (or array/parts) to sendMessage. The SDK
-    // throws 'request is not iterable' when given a plain object.
     let sendInput;
     if (typeof message === 'string') {
       sendInput = message;
     } else if (message && typeof message.text === 'string') {
       sendInput = message.text;
     } else {
-      // Fallback: stringify the object so the model still receives something
       sendInput = JSON.stringify(message);
     }
 

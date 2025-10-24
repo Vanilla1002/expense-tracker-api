@@ -1,9 +1,7 @@
 const {incomeDB} = require('./../dataBase/db');
 const {expensesDB} = require('./../dataBase/db');
-const { calculateBasicStats } = require('./mathFunctions');
 
 //expense functions
-
 async function addExpense(description, amount, category, date, userId) {
     return new Promise((resolve, reject) => {
         if (!date) {
@@ -51,7 +49,7 @@ function searchExpenses(userId, filters) {
 
 function getExpenseStats(userId, startDate, endDate) {
     return new Promise((resolve, reject) => {
-        let query = `SELECT * FROM expenses WHERE user_id = ?`;
+        let query = `SELECT amount FROM expenses WHERE user_id = ?`;
         const params = [userId];
 
         if (startDate) {
@@ -68,17 +66,19 @@ function getExpenseStats(userId, startDate, endDate) {
             if (err) {
                 return reject(err);
             }
-            const stats = calculateBasicStats(rows);
-            resolve(stats);
+            const total = rows.reduce((sum, row) => sum + row.amount, 0);
+            resolve({ total });
         });
     });
 }
 
 //income functions
 
-async function addIncome(description, amount, category, userId) {
+async function addIncome(description, amount, category,date, userId) {
     return new Promise((resolve, reject) => {
-        const date = new Date().toISOString().slice(0, 10);
+        if (!date) {
+            date = new Date().toISOString().slice(0, 10);
+        }
         incomeDB.run(
             `INSERT INTO incomes (description, amount, category, date, user_id) VALUES (?, ?, ?, ?, ?)`,
             [description, amount, category, date, userId],
@@ -137,8 +137,8 @@ function getIncomeStats(userId, startDate, endDate) {
             if (err) {
                 return reject(err);
             }
-            const stats = calculateBasicStats(rows);
-            resolve(stats);
+            const total = rows.reduce((sum, row) => sum + row.amount, 0);
+            resolve(total);
         });
     });
 }
